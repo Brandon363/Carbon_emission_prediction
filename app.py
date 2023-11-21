@@ -382,117 +382,117 @@ if selected_menu == "Home":
 # -------------------------------------Admin page ----------------------------------------------------
 if nav == "Admin":
 
-    dfx_og = pd.read_csv(r"data/data.csv", index_col=0)
-
-    # for EDA
-    column_obj = [dt for dt in data.columns if data[dt].dtype == "O"]
-
-    dfx = dfx_og.sort_values(by="prob_Good", ascending=False)
-
-    # turning deciles
-    dfx["Deciles"] = pd.qcut(dfx["prob_Bad"], 10, labels=np.arange(1, 11, 1))
-    dfx["Count"] = 1
-
-    dfx = dfx.sort_values(by="Deciles", ascending=False)
-
-    dfx["prob_Bad"] = dfx["prob_Bad"] * 100
-    dfx["prob_Good"] = dfx["prob_Good"] * 100
-
-    # rounding the percentages
-    dfx = dfx.round({"prob_Bad": 2, "prob_Good": 2})
-
-    pivot_table = pd.pivot_table(dfx, index="Deciles", values=["predicted", "prob_Good", "Count"],
-                                 aggfunc={"predicted": sum,
-                                          "prob_Good": min,
-                                          "Count": pd.Series.count})
-
-    pivot_table.rename(columns={"predicted": "Bad", "Count": "Total"}, inplace=True)
-
-    pivot_table["Good"] = pivot_table["Total"] - pivot_table["Bad"]
-    pivot_table["Cumm_Good"] = pivot_table["Good"].cumsum()
-    pivot_table["Cumm_Bad"] = pivot_table["Bad"].cumsum()
-    pivot_table["Cumm_Bad %"] = 100 * (pivot_table["Bad"].cumsum() / pivot_table["Bad"].sum())
-    pivot_table["Cumm_Good %"] = 100 * (pivot_table["Good"].cumsum() / pivot_table["Good"].sum())
-    pivot_table["Cumm_Bad_Avoided %"] = 100 - pivot_table["Cumm_Bad %"]
-
-    if st.checkbox("Data Destribution"):
-        dd_choice = st.selectbox("Destribute by",
-                                 ["None", "Sex", "Housing", "Saving accounts", "Checking account", "Risk",
-                                  "Duration"])
-
-        if dd_choice == "None":
-            st.write(" ")
-
-        if dd_choice == "Sex":
-            plt.figure(figsize=(6, 3))
-            plt.bar(data["Sex"].value_counts().index, data["Sex"].value_counts())
-            st.pyplot()
-
-        elif dd_choice == "Housing":
-            plt.figure(figsize=(6, 3))
-            plt.bar(data["Housing"].value_counts().index, data["Housing"].value_counts())
-            st.pyplot()
-
-        elif dd_choice == "Saving accounts":
-            plt.figure(figsize=(6, 3))
-            plt.bar(data["Saving accounts"].value_counts().index, data["Saving accounts"].value_counts())
-            st.pyplot()
-
-        elif dd_choice == "Checking account	":
-            plt.figure(figsize=(6, 3))
-            plt.bar(data["Checking account"].value_counts().index, data["Checking account"].value_counts())
-            st.pyplot()
-
-        elif dd_choice == "Risk":
-            plt.figure(figsize=(6, 3))
-            plt.bar(data["Risk"].value_counts().index, data["Risk"].value_counts())
-            st.pyplot()
-
-        elif dd_choice == "Duration":
-            plt.figure(figsize=(9, 3))
-            plt.plot(data["Duration"], linewidth=1)
-            st.pyplot()
-
-    if st.checkbox("Description of Distribuition Risk by"):
-        rd_choice = st.selectbox("Destribute by", ["None", "Sex", "Housing", "Saving accounts", "Checking account"])
-
-        if rd_choice == "None":
-            st.write(" ")
-
-        if rd_choice == "Sex":
-            plt.figure(figsize=(6, 3))
-            g = sns.countplot(x="Sex", data=data, palette="husl", hue="Risk")
-            g.set_title("Sex Count", fontsize=15)
-            g.set_xlabel("Sex type", fontsize=12)
-            g.set_ylabel("Count", fontsize=12)
-            st.pyplot()
-
-        if rd_choice == "Saving accounts":
-            plt.figure(figsize=(6, 3))
-            g = sns.countplot(x="Saving accounts", data=data, palette="husl", hue="Risk")
-            g.set_title("Saving Accounts Count", fontsize=15)
-            g.set_xlabel("Saving Accounts type", fontsize=12)
-            g.set_ylabel("Count", fontsize=12)
-            st.pyplot()
-
-        if rd_choice == "Housing":
-            plt.figure(figsize=(6, 3))
-            g = sns.countplot(x="Housing", data=data, palette="husl", hue="Risk")
-            g.set_title("Housing Count", fontsize=15)
-            g.set_xlabel("Housing type", fontsize=12)
-            g.set_ylabel("Count", fontsize=12)
-            st.pyplot()
-
-        if rd_choice == "Checking account":
-            plt.figure(figsize=(6, 3))
-            g = sns.countplot(x="Checking account", data=data, palette="husl", hue="Risk")
-            g.set_title("Checking account Count", fontsize=15)
-            g.set_xlabel("Checking account type", fontsize=12)
-            g.set_ylabel("Count", fontsize=12)
-            st.pyplot()
-
-    if st.checkbox("Show Current Credit Status"):
-        st.dataframe(pivot_table)
+    # dfx_og = pd.read_csv(r"data/data.csv", index_col=0)
+    #
+    # # for EDA
+    # column_obj = [dt for dt in data.columns if data[dt].dtype == "O"]
+    #
+    # dfx = dfx_og.sort_values(by="prob_Good", ascending=False)
+    #
+    # # turning deciles
+    # dfx["Deciles"] = pd.qcut(dfx["prob_Bad"], 10, labels=np.arange(1, 11, 1))
+    # dfx["Count"] = 1
+    #
+    # dfx = dfx.sort_values(by="Deciles", ascending=False)
+    #
+    # dfx["prob_Bad"] = dfx["prob_Bad"] * 100
+    # dfx["prob_Good"] = dfx["prob_Good"] * 100
+    #
+    # # rounding the percentages
+    # dfx = dfx.round({"prob_Bad": 2, "prob_Good": 2})
+    #
+    # pivot_table = pd.pivot_table(dfx, index="Deciles", values=["predicted", "prob_Good", "Count"],
+    #                              aggfunc={"predicted": sum,
+    #                                       "prob_Good": min,
+    #                                       "Count": pd.Series.count})
+    #
+    # pivot_table.rename(columns={"predicted": "Bad", "Count": "Total"}, inplace=True)
+    #
+    # pivot_table["Good"] = pivot_table["Total"] - pivot_table["Bad"]
+    # pivot_table["Cumm_Good"] = pivot_table["Good"].cumsum()
+    # pivot_table["Cumm_Bad"] = pivot_table["Bad"].cumsum()
+    # pivot_table["Cumm_Bad %"] = 100 * (pivot_table["Bad"].cumsum() / pivot_table["Bad"].sum())
+    # pivot_table["Cumm_Good %"] = 100 * (pivot_table["Good"].cumsum() / pivot_table["Good"].sum())
+    # pivot_table["Cumm_Bad_Avoided %"] = 100 - pivot_table["Cumm_Bad %"]
+    #
+    # if st.checkbox("Data Destribution"):
+    #     dd_choice = st.selectbox("Destribute by",
+    #                              ["None", "Sex", "Housing", "Saving accounts", "Checking account", "Risk",
+    #                               "Duration"])
+    #
+    #     if dd_choice == "None":
+    #         st.write(" ")
+    #
+    #     if dd_choice == "Sex":
+    #         plt.figure(figsize=(6, 3))
+    #         plt.bar(data["Sex"].value_counts().index, data["Sex"].value_counts())
+    #         st.pyplot()
+    #
+    #     elif dd_choice == "Housing":
+    #         plt.figure(figsize=(6, 3))
+    #         plt.bar(data["Housing"].value_counts().index, data["Housing"].value_counts())
+    #         st.pyplot()
+    #
+    #     elif dd_choice == "Saving accounts":
+    #         plt.figure(figsize=(6, 3))
+    #         plt.bar(data["Saving accounts"].value_counts().index, data["Saving accounts"].value_counts())
+    #         st.pyplot()
+    #
+    #     elif dd_choice == "Checking account	":
+    #         plt.figure(figsize=(6, 3))
+    #         plt.bar(data["Checking account"].value_counts().index, data["Checking account"].value_counts())
+    #         st.pyplot()
+    #
+    #     elif dd_choice == "Risk":
+    #         plt.figure(figsize=(6, 3))
+    #         plt.bar(data["Risk"].value_counts().index, data["Risk"].value_counts())
+    #         st.pyplot()
+    #
+    #     elif dd_choice == "Duration":
+    #         plt.figure(figsize=(9, 3))
+    #         plt.plot(data["Duration"], linewidth=1)
+    #         st.pyplot()
+    #
+    # if st.checkbox("Description of Distribuition Risk by"):
+    #     rd_choice = st.selectbox("Destribute by", ["None", "Sex", "Housing", "Saving accounts", "Checking account"])
+    #
+    #     if rd_choice == "None":
+    #         st.write(" ")
+    #
+    #     if rd_choice == "Sex":
+    #         plt.figure(figsize=(6, 3))
+    #         g = sns.countplot(x="Sex", data=data, palette="husl", hue="Risk")
+    #         g.set_title("Sex Count", fontsize=15)
+    #         g.set_xlabel("Sex type", fontsize=12)
+    #         g.set_ylabel("Count", fontsize=12)
+    #         st.pyplot()
+    #
+    #     if rd_choice == "Saving accounts":
+    #         plt.figure(figsize=(6, 3))
+    #         g = sns.countplot(x="Saving accounts", data=data, palette="husl", hue="Risk")
+    #         g.set_title("Saving Accounts Count", fontsize=15)
+    #         g.set_xlabel("Saving Accounts type", fontsize=12)
+    #         g.set_ylabel("Count", fontsize=12)
+    #         st.pyplot()
+    #
+    #     if rd_choice == "Housing":
+    #         plt.figure(figsize=(6, 3))
+    #         g = sns.countplot(x="Housing", data=data, palette="husl", hue="Risk")
+    #         g.set_title("Housing Count", fontsize=15)
+    #         g.set_xlabel("Housing type", fontsize=12)
+    #         g.set_ylabel("Count", fontsize=12)
+    #         st.pyplot()
+    #
+    #     if rd_choice == "Checking account":
+    #         plt.figure(figsize=(6, 3))
+    #         g = sns.countplot(x="Checking account", data=data, palette="husl", hue="Risk")
+    #         g.set_title("Checking account Count", fontsize=15)
+    #         g.set_xlabel("Checking account type", fontsize=12)
+    #         g.set_ylabel("Count", fontsize=12)
+    #         st.pyplot()
+    #
+    # if st.checkbox("Show Current Credit Status"):
+    #     st.dataframe(pivot_table)
 
     if st.checkbox("Show Added data"):
         new_entries = pd.read_csv("data/New_entry_Data.csv")
